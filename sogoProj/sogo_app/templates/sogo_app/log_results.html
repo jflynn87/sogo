@@ -1,0 +1,17 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+{%block body_block%}
+<script type="text/javascript" src="{%static 'js/log_results.js'%}">
+
+</script>
+<h1>Enter Your Results Here!</h1>
+
+<form method="post">
+  {%csrf_token%}
+    {{form|bootstrap}}
+    <button type="submit" class="btn btn-primary">Save Result</button>
+</form>
+
+{%endblock%}

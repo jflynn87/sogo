@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+
+
+{%block body_block%}
+<link rel="stylesheet" href={%static "css/index.css" %}>
+
+<div class="container">
+<br>
+
+
+<div class="image">
+  <div class="buttons">
+      <a href="{% url 'sogo_app:login' %}"> <button class="btn btn-primary">Login</button></a>
+      <a href="{% url 'sogo_app:signup' %}"> <button class="btn btn-primary">Join Us!</button></a>
+      <a href="{% url 'sogo_app:log_results' %}"> <button class="btn btn-primary">Log Results</button></a>
+  </div>
+    <img src="{%static "images/flag.jpg"%}" alt="">
+    <h1 class="welcome">Welcome to the Tokyo Spartans Fitness Challenge! <br />Track your progress and improvement here!</h1>
+</div>
+</div>
+{%endblock%}

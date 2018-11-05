@@ -1,0 +1,21 @@
+.image {
+  position: relative;
+  width: 100%;
+  padding-left: 0%;
+  padding-right: 0%;
+}
+
+.welcome  {
+  position: absolute;
+  top: 8%;
+  left: 5%;
+  width: 100%;
+  color: white;
+  font-weight: bold
+}
+
+.buttons {
+  position: absolute;
+  top: 3%;
+  left: 5%;
+}

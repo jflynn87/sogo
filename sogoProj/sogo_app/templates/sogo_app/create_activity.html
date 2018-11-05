@@ -1,0 +1,17 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+{%block body_block%}
+{%if user_is.superuser%}
+<h1>Create a New Activity to Track!</h1>
+
+<form method="post">
+  {%csrf_token%}
+    {{form|bootstrap}}
+    <button type="submit" class="btn btn-primary">Create Activity</button>
+</form>
+{%else%}
+<h3>Sorry, you are not authorized to use this page.  If youy are a captian, please log in.</h3>
+{%endif%}
+{%endblock%}

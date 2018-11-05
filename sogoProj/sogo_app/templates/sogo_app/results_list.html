@@ -1,0 +1,27 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+{%block body_block%}
+<h1>{{user.username}}'s Activity Log</h1>
+
+<table class="table">
+  <thead>
+    <th>Date</th>
+    <th>Activity</th>
+    <th>Result</th>
+    <th>Notes</th>
+  </thead>
+  <tbody>
+    {%for workout in object_list%}
+    <tr>
+      <td>{{workout.date}}</td>
+      <td>{{workout.activity}}</td>
+      <td>{{workout.result}}</td>
+      <td>{{workout.notes}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+{%endblock%}
