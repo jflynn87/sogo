@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 
 from sogo_app import forms
-from sogo_app. models import Results
+from sogo_app.models import Results
 
 # Create your views here.
 

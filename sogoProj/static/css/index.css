@@ -1,8 +1,12 @@
 .image {
   position: relative;
   width: 100%;
-  padding-left: 0%;
-  padding-right: 0%;
+  height: auto;
+}
+
+.responsive {
+  width: 100%;
+  height: auto;
 }
 
 .welcome  {
