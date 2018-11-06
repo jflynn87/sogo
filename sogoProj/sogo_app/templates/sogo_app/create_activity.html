@@ -3,7 +3,7 @@
 {%load bootstrap%}
 
 {%block body_block%}
-{%if user_is.superuser%}
+{%if user.is_superuser%}
 <h1>Create a New Activity to Track!</h1>
 
 <form method="post">
