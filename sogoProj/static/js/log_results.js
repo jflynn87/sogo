@@ -9,18 +9,28 @@ $(function() {
    });
  });
 
-$(function() {
-  $(".timing").timingfield({
-    maxHour:        23,
-    width:          263,
-    //hoursText:      'H',
-    minutesText:    'M',
-    secondsText:    'S',
-    hasSeconds:     true
-
-});
-
-
-
-
-});
+// $(function() {
+//   $(".duration").durationPicker({
+//     minutes: {
+//       label: "m",
+//       min: 0,
+//       max: 59
+//     },
+//     seconds: {
+//       label: "s",
+//       min: 0,
+//       max: 59
+//     },
+//     classname: 'form-control',
+//     responsive: true
+//
+// });
+//
+// $(function() {
+//   $("#{submit}").click({
+//     console.log('click');
+//
+//
+//
+//
+// });

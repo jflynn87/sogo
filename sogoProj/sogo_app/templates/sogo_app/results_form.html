@@ -11,9 +11,9 @@
 
 {%block body_block%}
 <!-- for duration picker -->
-<link href="{%static 'duration_picker/timingfield.css'%}" rel="stylesheet">
+<link href="{%static 'duration_picker/duration-picker.css'%}" rel="stylesheet">
 
-<script src="{%static 'duration_picker/timingfield.js'%}"></script>
+<script src="{%static 'duration_picker/duration-picker.js'%}"></script>
 <!-- end duration picker -->
 
 <script type="text/javascript" src="{%static 'js/log_results.js'%}">
@@ -28,7 +28,7 @@
 <form method="post">
   {%csrf_token%}
     {{form|bootstrap}}
-    <input type="submit" class="btn btn-primary" value="Submit Result">
+    <input type="submit" class="btn btn-primary" value="Submit Result" id='submit'>
 
 </form>
 <br>

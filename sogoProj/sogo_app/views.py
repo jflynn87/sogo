@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from sogo_app import forms
 from sogo_app.models import Results, Activities
 
+from pytimeparse.timeparse import timeparse
+
 # Create your views here.
 
 class HomePage(TemplateView):
@@ -30,6 +32,19 @@ class LogResultsView(LoginRequiredMixin, CreateView):
     form_class=forms.LogResultsForm
     model=Results
     success_url = reverse_lazy('sogo_app:my_results')
+
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     if request.POST:
+    #         print ('dispatch')
+    #         result= request.POST['result']
+    #         duration = timeparse(result)
+    #         print (duration)
+    #         kwargs['result_duration'] = duration
+
+
+    #    return super(LogResultsView, self).dispatch(request, *args, **kwargs)
+
 
 
     def form_valid(self, form):
