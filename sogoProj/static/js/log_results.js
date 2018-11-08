@@ -9,6 +9,37 @@ $(function() {
    });
  });
 
+ $(document).ready(function() {
+      $(':input[type="submit"]').prop('disabled', true);
+    })
+
+$(function() {
+ $('#duration').change(function() {
+   var duration = document.getElementById('duration').value
+   if (duration[2] != ':') {
+      alert ('Please enter MM:SS.  Note you must enter a : for a valid entry.')
+      $(this).css("background-color","#ff3333");
+    }
+   else {
+     $(':input[type="submit"]').prop('disabled', false);
+     $(this).css("background-color","#FFFFFF");
+
+}
+});
+ });
+
+
+ $(function() {
+  $('#submit').click(function() {
+    var duration = document.getElementById('duration').value
+    if (duration[2] != ':') {
+       alert ('Please enter MM:SS.  Note you must enter a : for a valid entry.')
+ }
+ });
+  });
+
+
+
 // $(function() {
 //   $(".duration").durationPicker({
 //     minutes: {

@@ -50,7 +50,7 @@ class LogResultsForm(ModelForm):
          self.fields['notes'].label='Notes (Optional)'
          self.fields['date'].initial = date.today()
          self.fields['result'].widget.attrs['placeholder'] = "MM:SS"
-         self.fields['result'].widget.attrs['class'] = "duration"
+         self.fields['result'].widget.attrs['id'] = "duration"
          #self.fields['result'].widget.attrs['name'] = "duration"
 
     def clean(self):

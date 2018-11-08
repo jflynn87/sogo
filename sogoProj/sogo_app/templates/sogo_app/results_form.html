@@ -25,7 +25,7 @@
 {%else%}
 <h1>Update Result</h1>
 {%endif%}
-<form method="post">
+<form method="post" id='form'>
   {%csrf_token%}
     {{form|bootstrap}}
     <input type="submit" class="btn btn-primary" value="Submit Result" id='submit'>
