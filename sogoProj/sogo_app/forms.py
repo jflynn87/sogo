@@ -42,7 +42,7 @@ class LogResultsForm(ModelForm):
         exclude = ['user']
         widgets = {
             'date': DateInput(),
-            'result': DurationInput()
+            #'result': DurationInput()
         }
 
     def __init__(self, *args, **kwargs):
