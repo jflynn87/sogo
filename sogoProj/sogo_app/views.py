@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from sogo_app import forms
 from sogo_app.models import Results, Activities
 
-from pytimeparse.timeparse import timeparse
+#from pytimeparse.timeparse import timeparse
 
 # Create your views here.
 
