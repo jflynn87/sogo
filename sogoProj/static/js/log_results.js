@@ -8,3 +8,19 @@ $(function() {
 
    });
  });
+
+$(function() {
+  $(".timing").timingfield({
+    maxHour:        23,
+    width:          263,
+    //hoursText:      'H',
+    minutesText:    'M',
+    secondsText:    'S',
+    hasSeconds:     true
+
+});
+
+
+
+
+});

@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+{%block tittle_block%}
+  <title>Confirm Delete - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<h1>Delete Activity</h1>
+<table class="table">
+  <thead>
+    <th>Date</th>
+    <th>Activity</th>
+    <th>Result</th>
+    <th>Notes</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{results.date}}</td>
+      <td>{{results.activity}}</td>
+      <td>{{results.result}}</td>
+      <td>{{results.notes}}</td>
+
+    </tr>
+  </tbody>
+</table>
+
+<a href="{% url 'sogo_app:my_results' %}"> <button class="btn btn-primary">Cancel</button></a>
+<br>
+<br>
+<form method="post">
+  {%csrf_token%}
+
+    <input type="submit" class="btn btn-danger" value="Delete Activity">
+
+
+</form>
+
+{%endblock%}

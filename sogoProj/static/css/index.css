@@ -1,25 +1,78 @@
+@media only screen and (min-width: 801px){
+
 .image {
   position: relative;
   width: 100%;
-  height: auto;
-}
+  height: 85%;
 
-.responsive {
-  width: 100%;
-  height: auto;
 }
-
-.welcome  {
+/*
+.img-title {
   position: absolute;
-  top: 12%;
-  left: 5%;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;
+
+}
+*/
+.responsive {
+  width: 99%;
+  height: auto;
+}
+
+.top  {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  height: 99%;
+  /*width: 100%;*/
+  color: white;
+  font-weight: bold;
+  text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;
+
+}
+
+.bottom  {
+  position: absolute;
+  bottom: 5%;
+  left: 0%;
   width: 100%;
   color: white;
-  font-weight: bold
+  font-weight: bold;
+  text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;
+
 }
 
 .buttons {
   position: absolute;
-  top: 3%;
-  left: 5%;
+  top: 25%;
+  left: 0%;
+
+}
+
+}
+@media only screen and (max-width: 800px){
+
+.image {
+  position: relative;
+}
+.top  h1 {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    /*width: 100%;*/
+    color: white;
+    font-weight: bold;
+    text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;
+
+  }
+
+.bottom  {
+    position: relative;
+    bottom: 5%;
+    left: 0%;
+    width: 100%;
+  }
+
+
 }

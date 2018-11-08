@@ -1,0 +1,40 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load static%}
+{%load bootstrap%}
+
+
+{%block tittle_block%}
+  <title>Add Results - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+<!-- for duration picker -->
+<link href="{%static 'duration_picker/timingfield.css'%}" rel="stylesheet">
+
+<script src="{%static 'duration_picker/timingfield.js'%}"></script>
+<!-- end duration picker -->
+
+<script type="text/javascript" src="{%static 'js/log_results.js'%}">
+
+
+</script>
+{%if not form.instance.pk%}
+<h1>Enter Your Results Here!</h1>
+{%else%}
+<h1>Update Result</h1>
+{%endif%}
+<form method="post">
+  {%csrf_token%}
+    {{form|bootstrap}}
+    <input type="submit" class="btn btn-primary" value="Submit Result">
+
+</form>
+<br>
+{%if form.instance.pk%}
+  <a href="{% url 'sogo_app:delete_results' pk=form.instance.pk %}"> <button class="btn btn-danger">Click to Delete</button></a>
+{%endif%}
+
+
+{%endblock%}

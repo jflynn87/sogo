@@ -6,17 +6,37 @@
 <link rel="stylesheet" href={%static "css/index.css" %}>
 
 <div class="container">
+
+<a href="{% url 'sogo_app:login' %}"> <button class="btn btn-primary">Login</button></a>
+<a href="{% url 'sogo_app:signup' %}"> <button class="btn btn-primary">Join Us!</button></a>
+<a href="{% url 'sogo_app:log_results' %}"> <button class="btn btn-primary">Add Results</button></a>
+<br>
 <br>
 
-
 <div class="image">
-  <div class="buttons">
-      <a href="{% url 'sogo_app:login' %}"> <button class="btn btn-primary">Login</button></a>
-      <a href="{% url 'sogo_app:signup' %}"> <button class="btn btn-primary">Join Us!</button></a>
-      <a href="{% url 'sogo_app:log_results' %}"> <button class="btn btn-primary">Log Results</button></a>
+    <!-- <div class="buttons"> -->
+
+    <!-- </div> -->
+
+    <img src="{%static "images/flag.jpg"%}" alt="" class='img-fluid'>
+    <div class="top">
+
+    <h1>STS Fitness Challenge Tracker</h1>
+    <h2>Use this community tracker to record and review your monthly STS Fitness Challenge progress.</h2>
+    </div>
+    <div class="bottom">
+    <br>
+    <h2>Monthly Schedule:
+    <h4>STS Run Burpee Challenge - Every 2nd Saturday</h4>
+    <h4>STS Full Body Strength Challenge - Every 4th Saturday</h4>
+    <br>
+    <h3><a href=https://www.facebook.com/groups/SOGOTokyoSpartans>Find out more about our free Spartan community workouts here.</h3>
+    </div>
   </div>
-    <img src="{%static "images/flag.jpg"%}" alt="" class='responsive'>
-    <h1 class="welcome">Welcome to the Tokyo Spartans Fitness Challenge! <br />Track your progress and improvement here!</h1>
 </div>
-</div>
+
+
+
+
+
 {%endblock%}

@@ -2,12 +2,18 @@
 {%load staticfiles%}
 {%load bootstrap%}
 
+
+{%block tittle_block%}
+  <title>My Results - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
 {%block body_block%}
 <h1>{{user.username}}'s Activity Log</h1>
 
 <table class="table">
   <thead>
-    <th>Date</th>
+    <th>Date (click to update)</th>
     <th>Activity</th>
     <th>Result</th>
     <th>Notes</th>
@@ -15,10 +21,11 @@
   <tbody>
     {%for workout in object_list%}
     <tr>
-      <td>{{workout.date}}</td>
+      <td><a href="/sogo_app/update_results/{{workout.pk}}/">{{workout.date}}</td>
       <td>{{workout.activity}}</td>
       <td>{{workout.result}}</td>
       <td>{{workout.notes}}</td>
+
     </tr>
     {%endfor%}
   </tbody>

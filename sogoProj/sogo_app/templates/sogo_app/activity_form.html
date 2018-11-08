@@ -2,6 +2,12 @@
 {%load staticfiles%}
 {%load bootstrap%}
 
+
+{%block tittle_block%}
+  <title>Create Activity - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
 {%block body_block%}
 {%if user.is_superuser%}
 <h1>Create a New Activity to Track!</h1>

@@ -3,9 +3,25 @@
 {%load bootstrap%}
 {%load humanize%}
 
-{%block body_block%}
-<h1>Leaderboard</h1>
 
+{%block tittle_block%}
+  <title>Leaderboard - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<h1 >Under Construction, Please Come back after the second challenge</h1>
+<!-- {%for k,v in display_dict.items%}
+<p>key = {{k}}</p>
+{%endfor%}
+<h2>See the progress of the STS community below.</h2>
+<h4> Please note that results are ranked in order of relative progress, not absolute results, as we hope to encourage members to compete against themselves rather than others.</h4>
+<br>
+
+
+{%for activity, results in display_dict.items%}
+<h3>Challenge:  {{activity}}</h3>
 <table class="table">
   <thead>
     <th>Name</th>
@@ -16,11 +32,10 @@
     <th>Progress</th>
   </thead>
   <tbody>
-    {%for user, results in result_dict.items%}
+    {%for data in results%}
     <tr>
-      <td>{{user.username}}</td>
-      {%for data in results%}
-      {%if forloop.counter == 5%}
+
+      {%if forloop.counter == 6%}
       <td>{{data|floatformat:"0"}}%</td>
       {%else%}
       <td>{{data}}</td>
@@ -31,4 +46,9 @@
   </tbody>
 </table>
 
-{%endblock%}
+<p>Notes</p>
+<p>1. Results will only show after at least 2 records have been added</p>
+<p>2. If you do not wish to have your name publicized, please create a new account with a non-identifiable user name.</p>
+<p>3. Only the most recent 90 days of results will be displayed on the leaderboard.</p>
+
+{%endblock%} -->

@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Bree+Serif|Markazi+Text|Fira+Sans:100|Lato:300,400" rel="stylesheet">
 
+  
+    <link rel="stylesheet" href="{%static '/css/base.css'%}">
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -24,7 +27,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="https://sogofitness.org/wp-content/uploads/2017/06/favicon-copy.ico">
 
     {%block tittle_block%}
-    <title>Tokyo Spartans Fitness Challenge!</title>
+    <title>STS Fitness Challenge Tracker</title>
     {%endblock%}
 
   </head>
@@ -44,7 +47,7 @@
             <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:log_results' %}">Log Results</a>
+            <a class="nav-link" href="{% url 'sogo_app:log_results' %}">Add Results</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'sogo_app:my_results' %}">My Results</a>
@@ -69,7 +72,7 @@
           </li>
           {%else%}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:login' %}">Login</a>
+            <a class="nav-link" href="{% url 'sogo_app:login' %}">Login/Sign Up</a>
           </li>
           {%endif%}
 

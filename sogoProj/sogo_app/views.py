@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, TemplateView, ListView
+from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sogo_app import forms
-from sogo_app.models import Results
+from sogo_app.models import Results, Activities
 
 # Create your views here.
 
@@ -23,24 +23,24 @@ class CreateActivityView(LoginRequiredMixin, CreateView):
     login_url = '/sogo_app/login'
     form_class=forms.CreateActivityForm
     success_url=reverse_lazy('index')
-    template_name = 'sogo_app/create_activity.html'
-
+    #template_name = 'sogo_app/create_activity.html'
 
 class LogResultsView(LoginRequiredMixin, CreateView):
     login_url = '/sogo_app/login'
     form_class=forms.LogResultsForm
-    success_url = reverse_lazy('index')  #update this to leaderboard or somewhere else
-    template_name = 'sogo_app/log_results.html'
+    model=Results
+    success_url = reverse_lazy('sogo_app:my_results')
+
 
     def form_valid(self, form):
+
         result = form.save(commit=False)
-        #print (result)
-        #print (self.request.user.pk)
         print ('users', User.objects.all())
 
         result.user = User.objects.get(pk=self.request.user.pk)
         result.save()
         return HttpResponseRedirect(self.success_url)
+
 
 class LeaderboardView(LoginRequiredMixin, ListView):
     login_url= '/sogo_app/login'
@@ -49,23 +49,60 @@ class LeaderboardView(LoginRequiredMixin, ListView):
 
     def get_context_data(self,**kwargs):
         context = super(LeaderboardView, self).get_context_data(**kwargs)
-        result_dict = {}
+        activity_dict = {}
 
-        for user in User.objects.all():
-            result_list=[]
-            if len(Results.objects.filter(activity__track=True, user__pk=user.pk).order_by('date')[:2]) > 1:
-                for result in Results.objects.filter(activity__track=True, user__pk=user.pk).order_by('date')[:2]:
-                    result_list.append(str(result.date))
-                    result_list.append(result.result)
-                percentage_change = ((result_list[1]-result_list[3])/result_list[1])*100
-                result_list.append(percentage_change)
-                result_dict[user]=result_list
-        print (result_dict)
+
+        cut_off_date = datetime.today() - timedelta(days=90)
+        print (cut_off_date)
+        for activity in Activities.objects.filter(track=True):
+            print (activity)
+            result_dict = {}
+            for user in User.objects.all():
+                #print ('user', user)
+                result_list=[]
+                if len(Results.objects.filter(activity=activity, user__pk=user.pk, date__gte=cut_off_date).order_by('date')[:2]) > 1:
+                    #print ('in results')
+                    result_list.append(user.username)
+                    for result in Results.objects.filter(activity=activity, user__pk=user.pk).order_by('date')[:2]:
+                        result_list.append(str(result.date))
+                        result_list.append(result.result)
+                    percentage_change = ((result_list[2]-result_list[4])/result_list[2])*100
+                    result_list.append(percentage_change)
+
+                    try:
+
+                        activity_dict[activity].append(result_list)
+                    except KeyError:
+                        print(result_list)
+                        activity_dict[activity] = result_list
+                    except Exception as e:
+                        print ('execption', e)
+
+        print ('act dict', activity_dict)
+        # sort the results by the % change which is the last item in the result_list
+        display_dict = {}
+        sorted_results_list = []
+        #for key, value in activity_dict.items():
+
+        for activity, result in sorted(activity_dict.items(), key=lambda x:x[1][5], reverse=True):
+            display_dict[activity]=result
+
 
         context.update({
-          'result_dict': result_dict,
+          'result_dict': display_dict,
          })
         return context
+
+class ResultsUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = '/sogo_app/login'
+    form_class = forms.LogResultsForm
+    success_url=reverse_lazy('sogo_app:my_results')
+    model = Results
+
+class ResultsDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = '/sogo_app/login'
+    model = Results
+    success_url = reverse_lazy('sogo_app:my_results')
 
 
 class MyResultsView(LoginRequiredMixin, ListView):
@@ -78,3 +115,8 @@ class MyResultsView(LoginRequiredMixin, ListView):
         'object_list': Results.objects.filter(user=self.request.user),
         })
         return context
+
+class MyResultsDetailView(LoginRequiredMixin, DetailView):
+    login_url= '/sogo_app/login'
+    model = Results
+    template_name = 'sogo_app/result_detail.html'
