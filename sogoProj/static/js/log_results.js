@@ -20,6 +20,14 @@ $(function() {
       alert ('Please enter MM:SS.  Note you must enter a : for a valid entry.')
       $(this).css("background-color","#ff3333");
     }
+   else if (duration.substring(0,2) > 59) {
+      alert ('Maximum 59 minutes, please re-enter')
+      $(this).css("background-color","#ff3333");
+}
+   else if (duration.substring(3,5) > 59) {
+      alert ('Maximum 59 seconds, please re-enter')
+      $(this).css("background-color","#ff3333");
+}
    else {
      $(':input[type="submit"]').prop('disabled', false);
      $(this).css("background-color","#FFFFFF");
