@@ -1,12 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, PermissionsMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Create your models here.
 #class User(auth.models.User,auth.models.PermissionsMixin):
 
-#    def __str__(self):
-#        return "@{}".format(self.username)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    leaderboard = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.user.username
 
 class Activities(models.Model):
     TARGET_TYPES = (('T', 'Time'),

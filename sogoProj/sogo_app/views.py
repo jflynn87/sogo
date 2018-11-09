@@ -21,6 +21,7 @@ class SignUp(CreateView):
     success_url = reverse_lazy('sogo_app:login')
     template_name = 'sogo_app/signup.html'
 
+
 class CreateActivityView(LoginRequiredMixin, CreateView):
     login_url = '/sogo_app/login'
     form_class=forms.CreateActivityForm
@@ -32,19 +33,6 @@ class LogResultsView(LoginRequiredMixin, CreateView):
     form_class=forms.LogResultsForm
     model=Results
     success_url = reverse_lazy('sogo_app:my_results')
-
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     if request.POST:
-    #         print ('dispatch')
-    #         result= request.POST['result']
-    #         duration = timeparse(result)
-    #         print (duration)
-    #         kwargs['result_duration'] = duration
-
-
-    #    return super(LogResultsView, self).dispatch(request, *args, **kwargs)
-
 
 
     def form_valid(self, form):
