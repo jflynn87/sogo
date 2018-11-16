@@ -174,22 +174,10 @@ class CreateGritChallengeView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        #super(CreateGritChallengeView, self)
         plan = form.save(commit=False)
         plan.user = User.objects.get(pk=self.request.user.pk)
         plan.target_date = plan.start_date + timedelta(days=30)
         plan.save()
-
-        # date = plan.start_date
-        #
-        # while date <= plan.target_date:
-        #     print ('self', self.object)
-        #     activity = GritActivity()
-        #     activity.challenge = self
-        #     activity.date=date
-        #     activity.count=0
-        #     activity.save()
-        #     date = date + timedelta(days=1)
 
         return HttpResponseRedirect(self.success_url)
 
@@ -207,7 +195,10 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
 
     def get_context_data(self,**kwargs):
         context = super(CreateGritActivityView, self).get_context_data(**kwargs)
-        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user))
+
+        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now()))
+
+        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now().date()))
 
         summary_list = []
         original_target = 1000
@@ -220,6 +211,7 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         summary_list = [remaining, completed.get('count__sum'), target, percent_complete, penalty]
 
         context.update({
+            'today': form_today,
             'form': form,
             'summary_list': summary_list
         })

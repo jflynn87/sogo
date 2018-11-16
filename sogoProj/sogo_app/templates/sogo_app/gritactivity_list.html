@@ -1,5 +1,6 @@
 {%extends "base.html"%}
 {%load staticfiles%}
+{%load static%}
 {%load bootstrap%}
 
 
@@ -11,7 +12,8 @@
 
 {%block body_block%}
 
-<script type="text/javascript" src="{%static 'js/gitactivity.js'%}"> </script>
+<link rel="stylesheet" href={%static "css/grit_activity.css" %}>
+
 
 
 <div class="container">
@@ -38,13 +40,15 @@
 <hr>
 
 <h3>Grit Challenge Activity Detail</h3>
-<br>
+<p>Please enter the number of burpies per day.  You can only enter for today or past dates.</p><br>
 <form method="post">
   {%csrf_token%}
   <button type="submit" class="btn btn-primary">Update Burpee Counts</button>
 <br>
 <br>
 <ul style='list-style-type:none'  id="burpee-tbl">
+  <li>{{today}}</li>
+<hr>
   {{form.management_form}}
   {%for count in form%}
       <li>{{count}}</li>
