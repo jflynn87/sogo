@@ -2,12 +2,14 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from sogo_app.models import Results, Activities, UserProfile
+from sogo_app.models import Results, Activities, UserProfile, GritActivity, GritChallenge
 from datetime import date, datetime, timedelta
 from django.forms.widgets import TextInput
 #from django.utils.dateparse import parse_duration
 from django.utils.dateparse import parse_duration
-
+from django.contrib.auth.models import User
+from django.forms.models import modelformset_factory
+from django.forms.formsets import BaseFormSet
 
 
 class UserProfileForm(ModelForm):
@@ -36,22 +38,9 @@ class UserCreateForm(UserCreationForm):
         self.fields['password2'].help_text = "* Enter the same password as before, for verification."
 
 
-
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-class DurationInput(TextInput):
-    def format_value(self, value):
-        duration = parse_duration(value)
-        print ('duration', value)
-        seconds = duration.seconds
-
-        minutes = seconds // 60
-        seconds = seconds % 60
-
-        minutes = minutes % 60
-
-        return '{:02d}:{:02d}'.format(minutes, seconds)
 
 class LogResultsForm(ModelForm):
     class Meta:
@@ -67,22 +56,24 @@ class LogResultsForm(ModelForm):
          super().__init__(*args, **kwargs)
          self.fields['notes'].label='Notes (Optional)'
          self.fields['date'].initial = date.today()
-         self.fields['result'].widget.attrs['placeholder'] = "MM:SS"
-         self.fields['result'].widget.attrs['id'] = "duration"
-         self.fields['result'].label="Time. Please enter MM:SS, for example 05:05 for 5 mins, 5 sec"
+         self.fields['duration'].widget.attrs['placeholder'] = "MM:SS"
+         self.fields['duration'].widget.attrs['id'] = "duration"
+         self.fields['duration'].label="Time. Please enter MM:SS, for example 05:05 for 5 mins, 5 sec"
          #self.fields['result'].widget.attrs['name'] = "duration"
 
     def clean(self):
+        #if - add duplicte check
+
         form_data = self.cleaned_data
-        print ('input', form_data['result'])
+        print ('input', form_data['duration'])
         try:
            print (self.cleaned_data)
            form_data = self.cleaned_data
-           time = (form_data['result'])
+           time = (form_data['duration'])
            print ('time', time)
            datetime.strptime(str(time), "%H:%M:%S")
            if time  < timedelta(minutes=5):
-              self.errors['result'] = ["time too short, please re-confirm"]
+              self.errors['duration'] = ["time too short, please re-confirm"]
 
         except ValueError:
            print ('val error')
@@ -95,11 +86,44 @@ class LogResultsForm(ModelForm):
            return form_data
 
 
+
+
 class CreateActivityForm(ModelForm):
     class Meta:
         model = Activities
         fields = '__all__'
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].label = "Activity Name"
+
+
+class CreateGritChallengeForm(ModelForm):
+    class Meta:
+        model = GritChallenge
+        fields = ('start_date',)
+        widgets = {
+            'start_date': DateInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_date'].label = ''
+        self.fields['start_date'].initial = date.today()
+
+
+class CreateGritActivityForm(ModelForm):
+    class Meta:
+        model = GritActivity
+        fields = ('date', 'count')
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['count'].label = ''
+        self.fields['date'].widget.attrs['readonly']=True
+        self.fields['date'].label = ''
+        
+
+BurpeeFormSet = modelformset_factory(GritActivity, form=CreateGritActivityForm, max_num=30)

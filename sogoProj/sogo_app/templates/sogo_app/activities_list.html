@@ -1,0 +1,19 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+{%block tittle_block%}
+  <title>Activities - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+<h1>Challenge Activity List</h1>
+  {%for activity in object_list%}
+  <ul>
+    <li> <a href="/sogo_app/update_activity/{{activity.pk}}/">{{activity}}</a></li>
+  </ul>
+
+{%endfor%}
+{%endblock%}

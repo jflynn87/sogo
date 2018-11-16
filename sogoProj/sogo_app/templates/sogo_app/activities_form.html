@@ -10,13 +10,27 @@
 
 {%block body_block%}
 {%if user.is_superuser%}
+{%if not form.instance.pk%}
 <h1>Create a New Activity to Track!</h1>
+{%else%}
+<h1>Update Activity</h1>
+{%endif%}
+
 
 <form method="post">
   {%csrf_token%}
     {{form|bootstrap}}
+  {%if not form.instance.pk%}
     <button type="submit" class="btn btn-primary">Create Activity</button>
+  {%else%}
+    <button type="submit" class="btn btn-primary">Update Activity</button>
+  {%endif%}
 </form>
+<br>
+{%if form.instance.pk%}
+  <a href="{% url 'sogo_app:delete_activity' pk=form.instance.pk %}"> <button class="btn btn-danger">Click to Delete</button></a>
+{%endif%}
+
 {%else%}
 <h3>Sorry, you are not authorized to use this page.  If youy are a captian, please log in.</h3>
 {%endif%}

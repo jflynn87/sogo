@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {%load staticfiles%}
 {%load static%}
+{%load bootstrap%}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -11,7 +12,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Bree+Serif|Markazi+Text|Fira+Sans:100|Lato:300,400" rel="stylesheet">
 
-  
+
     <link rel="stylesheet" href="{%static '/css/base.css'%}">
 
 
@@ -46,23 +47,29 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:log_results' %}">Add Results</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:my_results' %}">My Results</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"  id="monthly_navbarDropdown" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Montly STS Challenge</a>
+              <div class="dropdown-menu" aria-labelledby="monthly_navbarDropdown">
+                <a class="nav-link" href="{% url 'sogo_app:log_results' %}">Add Results</a>
+                <a class="nav-link" href="{% url 'sogo_app:my_results' %}">My Results</a>
+                <a class="nav-link" href="{% url 'sogo_app:leaderboard' %}">Leaderboard</a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:leaderboard' %}">Leaderboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'index' %}">Explanation</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"  id="grit_navbarDropdown" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">STS Grit Challenge</a>
+              <div class="dropdown-menu" aria-labelledby="grit_navbarDropdown">
+                <a class="nav-link" href="{% url 'sogo_app:create_grit' %}">Start Challenge</a>
+                <a class="nav-link" href="{% url 'sogo_app:grit_list' %}">Update/View Progress</a>
           </li>
 
           {%if user.is_superuser%}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'sogo_app:create_activity' %}">Manage Activities</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage Activities</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'sogo_app:activity_list' %}">Activity List</a>
+                <a class="dropdown-item" href="{% url 'sogo_app:create_activity' %}">Add Activity</a>
+                <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Pages</a>
+
           </li>
           {%endif%}
 

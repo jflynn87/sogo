@@ -23,7 +23,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.HomePage.as_view(),name='index'),
-    #url(r'^sogo_app/', include('django.contrib.auth.urls')),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^sogo_app/', include('sogo_app.urls',namespace='sogo_app')),
 
 

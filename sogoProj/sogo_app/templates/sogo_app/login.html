@@ -13,10 +13,11 @@
   <form method="POST">
     {%csrf_token%}
     {{form|bootstrap}}
-    <input type="submit" class="btn btn-default" value="Login">
+    <input type="submit" class="btn btn-primary" value="Login">
   </form>
   <br>
-  <p><a href="{% url 'sogo_app:signup' %}"> <button class="btn btn-link">Click here to register</button></a></p>
+  <p><a href="{% url 'sogo_app:signup' %}"> <button class="btn btn-primary">Register</button></a></p>
+  <p><a href="{% url 'password_reset' %}"> <button class="btn btn-primary">Reset password</button></a></p>
 
 
 </div>

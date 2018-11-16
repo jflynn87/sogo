@@ -2,3 +2,11 @@ body {
   padding-left: 5%;
   padding-right: 5%
 }
+
+
+hr {
+      display: block;
+      size: 30px;
+      width: 100%;
+      background-color: #365d9b;
+    }

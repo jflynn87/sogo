@@ -1,0 +1,50 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+
+{%block tittle_block%}
+  <title>Burpees - STS Grit Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<hr>
+<h3>{{user.username}}'s Grit Challenge Summary</h3>
+<table class="table">
+  <thead>
+    <th>Remaining Burpees</th>
+    <th>Compelted Burpees</th>
+    <th>Target</th>
+    <th>% Complete</th>
+    <th>Penalty</th>
+  </thead>
+  <tbody>
+    <tr>
+      {%for data in summary_list%}
+      <td>{{data}}</td>
+      {%endfor%}
+      </tr>
+    </tbody>
+</table>
+
+
+<hr>
+
+<h3>Grit Challenge Activity Detail</h3>
+<br>
+<form method="post">
+  {%csrf_token%}
+  <button type="submit" class="btn btn-primary">Update Burpee Counts</button>
+<br>
+<br>
+<ul style='list-style-type:none'>
+  {{form.management_form}}
+  {%for count in form%}
+      <li>{{count}}</li>
+  {%endfor%}
+</form>
+</ul>
+{%endblock%}

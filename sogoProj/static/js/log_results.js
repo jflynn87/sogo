@@ -10,7 +10,12 @@ $(function() {
  });
 
  $(document).ready(function() {
+      if (document.getElementById('duration').value != 0) {
+          $(':input[type="submit"]').prop('disabled', false);
+      }
+      else {
       $(':input[type="submit"]').prop('disabled', true);
+    }
     })
 
 $(function() {

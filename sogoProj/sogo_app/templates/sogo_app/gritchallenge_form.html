@@ -1,0 +1,34 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+
+{%block tittle_block%}
+  <title>Burpees - STS Grit Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<script type="text/javascript" src="{%static 'js/log_results.js'%}"> </script>
+
+
+<h1 align='center'>Grit Challenge - Burpees!</h1>
+    <h3>{{challenge_form.start_date.label}}</h3>
+    {%if not form.instance.pk%}
+    <form method="post">
+      {%csrf_token%}
+      <p>Please enter the start date for your challenge</p>
+      <p>{{form}}</p>
+
+     <input align="center" type="submit" class="btn btn-primary" value="Start Plan" id='submit'>
+    </form>
+    {%else%}
+
+    <a href="{% url 'sogo_app:grit_list' %}">You have already created you STS Grit Challenge, please click here to go to your progress page</a>
+    {%endif%}
+
+
+
+{%endblock%}
