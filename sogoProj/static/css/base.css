@@ -1,6 +1,7 @@
 body {
   padding-left: 5%;
-  padding-right: 5%
+  padding-right: 5%;
+  width: 100%;
 }
 
 
@@ -10,3 +11,9 @@ hr {
       width: 100%;
       background-color: #365d9b;
     }
+
+@media only screen and (max-width: 600px){
+th {
+  font-size: 60%;
+}
+}

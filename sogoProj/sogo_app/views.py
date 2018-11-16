@@ -199,6 +199,11 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
     success_url = reverse_lazy('sogo_app:grit_list')
     form_class = forms.CreateGritActivityForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if not GritActivity.objects.filter(challenge__user=self.request.user).exists():
+            return HttpResponseRedirect(reverse('sogo_app:create_grit'))
+        else:
+            return super(CreateGritActivityView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self,**kwargs):
         context = super(CreateGritActivityView, self).get_context_data(**kwargs)

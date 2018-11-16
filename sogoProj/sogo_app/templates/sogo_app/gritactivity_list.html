@@ -11,6 +11,10 @@
 
 {%block body_block%}
 
+<script type="text/javascript" src="{%static 'js/gitactivity.js'%}"> </script>
+
+
+<div class="container">
 <hr>
 <h3>{{user.username}}'s Grit Challenge Summary</h3>
 <table class="table">
@@ -40,11 +44,12 @@
   <button type="submit" class="btn btn-primary">Update Burpee Counts</button>
 <br>
 <br>
-<ul style='list-style-type:none'>
+<ul style='list-style-type:none'  id="burpee-tbl">
   {{form.management_form}}
   {%for count in form%}
       <li>{{count}}</li>
   {%endfor%}
 </form>
 </ul>
+</div>
 {%endblock%}

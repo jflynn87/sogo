@@ -11,8 +11,10 @@
 
 {%block body_block%}
 
-<!-- <h1 >Under Construction, Please Come back after the second challenge</h1> -->
+{%if not user.is_superuser%}
+<h1 >Under Construction, Please Come back after the second challenge</h1>
 
+{%else%}
 <h2>See the progress of the STS community below.</h2>
 <h4> Please note that results are ranked in order of relative progress, not absolute results, as we hope to encourage members to compete against themselves rather than others.</h4>
 <br>
@@ -50,5 +52,5 @@
 <p>1. Results will only show after at least 2 records have been added</p>
 <p>2. If you do not wish to have your name publicized, please create a new account with a non-identifiable user name.</p>
 <p>3. Only the most recent 90 days of results will be displayed on the leaderboard.</p>
-
+{%endif%}
 {%endblock%}

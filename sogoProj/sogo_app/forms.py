@@ -124,6 +124,10 @@ class CreateGritActivityForm(ModelForm):
         self.fields['count'].label = ''
         self.fields['date'].widget.attrs['readonly']=True
         self.fields['date'].label = ''
-        
+        if (self.instance.date) > datetime.now().date():
+            self.fields['count'].widget.attrs['readonly']=True
+        self.fields['date'].widget.attrs['size']= '11'
+        self.fields['count'].widget.attrs['size']= '10'
+
 
 BurpeeFormSet = modelformset_factory(GritActivity, form=CreateGritActivityForm, max_num=30)

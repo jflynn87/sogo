@@ -13,7 +13,7 @@
 
 <script type="text/javascript" src="{%static 'js/log_results.js'%}"> </script>
 
-
+<div class="container">
 <h1 align='center'>Grit Challenge - Burpees!</h1>
     <h3>{{challenge_form.start_date.label}}</h3>
     {%if not form.instance.pk%}
@@ -29,6 +29,6 @@
     <a href="{% url 'sogo_app:grit_list' %}">You have already created you STS Grit Challenge, please click here to go to your progress page</a>
     {%endif%}
 
-
+</div>
 
 {%endblock%}
