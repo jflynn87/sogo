@@ -40,16 +40,22 @@
 <hr>
 
 <h3>Grit Challenge Activity Detail</h3>
-<p>Please enter the number of burpies per day.  You can only enter for today or past dates.</p><br>
-<form method="post">
+<p>{{message}}</p><br>
+<form id="today" method="post">
   {%csrf_token%}
-  <button type="submit" class="btn btn-primary">Update Burpee Counts</button>
+  <button type="submit" name="today" class="btn btn-primary">Update Burpee Counts</button>
 <br>
 <br>
+
 <ul style='list-style-type:none'  id="burpee-tbl">
   <li>{{today}}</li>
+</form>
 <hr>
-  {{form.management_form}}
+
+<form id="set" method="post">
+{%csrf_token%}
+</form>
+{{form.management_form}}
   {%for count in form%}
       <li>{{count}}</li>
   {%endfor%}

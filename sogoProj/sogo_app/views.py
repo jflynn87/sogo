@@ -76,22 +76,16 @@ class LeaderboardView(LoginRequiredMixin, ListView):
         context = super(LeaderboardView, self).get_context_data(**kwargs)
         activity_dict = {}
 
-
         cut_off_date = datetime.today() - timedelta(days=90)
         print (cut_off_date)
         for activity in Activities.objects.filter(track=True):
-            #print (activity)
-
-            #result_dict = {}
             for user in User.objects.all():
-                #print ('user', user)
                 result_list=[]
                 if len(Results.objects.filter(activity=activity, user__pk=user.pk, date__gte=cut_off_date).order_by('date')[:2]) > 1:
-                    #print ('in results')
                     result_list.append(user.username)
                     for result in Results.objects.filter(activity=activity, user__pk=user.pk).order_by('date')[:2]:
                         result_list.append(str(result.date))
-                        result_list.append(result.result)
+                        result_list.append(result.duration)
                     percentage_change = ((result_list[2]-result_list[4])/result_list[2])*100
                     result_list.append(percentage_change)
 
@@ -206,22 +200,32 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         penalty = len(GritActivity.objects.filter(challenge__user=self.request.user, date__lt=datetime.today(), count=0)) * 100
         remaining = (original_target + penalty) - completed.get('count__sum')
         target = original_target + penalty
-        #percent_complete = float(completed.get('count__sum')/target)
         percent_complete = ("{0:.2f}%".format(completed.get('count__sum')/target))
         summary_list = [remaining, completed.get('count__sum'), target, percent_complete, penalty]
+        message = "Please enter the number of burpies per day. You can only enter for today or past dates."
 
         context.update({
             'today': form_today,
             'form': form,
-            'summary_list': summary_list
+            'summary_list': summary_list,
+            'message': message
         })
         return context
 
     def post(self, request):
+
+        print (request.user)
+        try:
+            GritActivity.objects.filter(challenge__user=request.user,date=request.POST['date']).update(count=request.POST['count'])
+        except Exception as e:
+            print ("today save issue", request.user, e)
+
         formset = forms.BurpeeFormSet(request.POST)
+        print (formset)
 
         if formset.is_valid():
             for form in formset:
                 cd = form.cleaned_data
                 GritActivity.objects.filter(challenge__user=request.user,date=cd['date']).update(count=cd['count'])
         return HttpResponseRedirect(reverse('sogo_app:grit_list'))
+        #return render(request, 'sogo_app:grit_list', {   })
