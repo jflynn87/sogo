@@ -130,5 +130,5 @@ class CreateGritActivityForm(ModelForm):
             self.fields['count'].widget.attrs['readonly']=True
 
 
-
-BurpeeFormSet = modelformset_factory(GritActivity, form=CreateGritActivityForm, max_num=30)
+#29 forms as today is a separate form and target is 30 days
+BurpeeFormSet = modelformset_factory(GritActivity, form=CreateGritActivityForm, max_num=29)

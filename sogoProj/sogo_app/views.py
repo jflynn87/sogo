@@ -170,7 +170,7 @@ class CreateGritChallengeView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         plan = form.save(commit=False)
         plan.user = User.objects.get(pk=self.request.user.pk)
-        plan.target_date = plan.start_date + timedelta(days=30)
+        plan.target_date = plan.start_date + timedelta(days=29)
         plan.save()
 
         return HttpResponseRedirect(self.success_url)
@@ -221,7 +221,7 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
             print ("today save issue", request.user, e)
 
         formset = forms.BurpeeFormSet(request.POST)
-        print (formset)
+        #print (formset)
 
         if formset.is_valid():
             for form in formset:
