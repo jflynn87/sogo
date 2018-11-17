@@ -12,7 +12,7 @@
 
 {%block body_block%}
 
-<link rel="stylesheet" href={%static "css/grit_activity.css" %}>
+<link rel="stylesheet" href={%static "css/gritactivity.css" %}>
 
 
 
@@ -40,7 +40,8 @@
 <hr>
 
 <h3>Grit Challenge Activity Detail</h3>
-<p>{{message}}</p><br>
+<p class="message">{{message}}</p>
+<br>
 <form id="today" method="post">
   {%csrf_token%}
   <button type="submit" name="today" class="btn btn-primary">Update Burpee Counts</button>
@@ -48,10 +49,11 @@
 <br>
 
 <ul style='list-style-type:none'  id="burpee-tbl">
+  <p>Today:</p>
   <li>{{today}}</li>
 </form>
 <hr>
-
+<p>Other dates:</p>
 <form id="set" method="post">
 {%csrf_token%}
 </form>

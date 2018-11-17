@@ -190,24 +190,13 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
     def get_context_data(self,**kwargs):
         context = super(CreateGritActivityView, self).get_context_data(**kwargs)
 
-        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now()))
-
-        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now().date()))
-
-        summary_list = []
-        original_target = 1000
-        completed = GritActivity.objects.filter(challenge__user=self.request.user).aggregate(Sum('count'))
-        penalty = len(GritActivity.objects.filter(challenge__user=self.request.user, date__lt=datetime.today(), count=0)) * 100
-        remaining = (original_target + penalty) - completed.get('count__sum')
-        target = original_target + penalty
-        percent_complete = ("{0:.2f}%".format(completed.get('count__sum')/target))
-        summary_list = [remaining, completed.get('count__sum'), target, percent_complete, penalty]
+        data = self.build_data()
         message = "Please enter the number of burpies per day. You can only enter for today or past dates."
-
+        
         context.update({
-            'today': form_today,
-            'form': form,
-            'summary_list': summary_list,
+            'today': data[0],
+            'form': data[1],
+            'summary_list': data[2],
             'message': message
         })
         return context
@@ -221,11 +210,33 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
             print ("today save issue", request.user, e)
 
         formset = forms.BurpeeFormSet(request.POST)
-        #print (formset)
 
         if formset.is_valid():
             for form in formset:
                 cd = form.cleaned_data
                 GritActivity.objects.filter(challenge__user=request.user,date=cd['date']).update(count=cd['count'])
-        return HttpResponseRedirect(reverse('sogo_app:grit_list'))
-        #return render(request, 'sogo_app:grit_list', {   })
+
+        data = self.build_data()
+        message = "Updates Successful"
+
+        return render(request, 'sogo_app/gritactivity_list.html', {
+                        'today': data[0],
+                        'form': data[1],
+                        'summary_list': data[2],
+                        'message': "Updates Successful."})
+
+    def build_data(self):
+        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now()))
+
+        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now().date()))
+
+        summary_list = []
+        original_target = 1000
+        completed = GritActivity.objects.filter(challenge__user=self.request.user).aggregate(Sum('count'))
+        penalty = len(GritActivity.objects.filter(challenge__user=self.request.user, date__lt=datetime.today(), count=0)) * 100
+        remaining = (original_target + penalty) - completed.get('count__sum')
+        target = original_target + penalty
+        percent_complete = ("{0:.2f}%".format(completed.get('count__sum')/target))
+        summary_list = [remaining, completed.get('count__sum'), target, percent_complete, penalty]
+
+        return form_today, form, summary_list
