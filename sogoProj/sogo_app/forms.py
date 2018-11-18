@@ -10,6 +10,7 @@ from django.utils.dateparse import parse_duration
 from django.contrib.auth.models import User
 from django.forms.models import modelformset_factory
 from django.forms.formsets import BaseFormSet
+import pytz
 
 
 class UserProfileForm(ModelForm):
@@ -110,7 +111,7 @@ class CreateGritChallengeForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['start_date'].label = ''
-        self.fields['start_date'].initial = date.today()
+        self.fields['start_date'].initial = datetime.now(pytz.timezone("Asia/Tokyo")).date()
 
 
 class CreateGritActivityForm(ModelForm):

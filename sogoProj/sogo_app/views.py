@@ -4,7 +4,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, tzinfo
+import pytz
 
 from sogo_app import forms
 from sogo_app.models import Results, Activities, GritActivity, GritChallenge
@@ -12,6 +13,7 @@ from sogo_app.models import Results, Activities, GritActivity, GritChallenge
 from django.core.exceptions import ObjectDoesNotExist
 from collections import defaultdict
 from django.db.models import Sum
+
 
 
 #from pytimeparse.timeparse import timeparse
@@ -182,6 +184,9 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
     form_class = forms.CreateGritActivityForm
 
     def dispatch(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('sogo_app:login'))
         if not GritActivity.objects.filter(challenge__user=self.request.user).exists():
             return HttpResponseRedirect(reverse('sogo_app:create_grit'))
         else:
@@ -189,10 +194,10 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
 
     def get_context_data(self,**kwargs):
         context = super(CreateGritActivityView, self).get_context_data(**kwargs)
-
+        print (self.request )
         data = self.build_data()
-        message = "Please enter the number of burpies per day. You can only enter for today or past dates."
-        
+        message = "Please enter the number of burpees per day. You can only enter for today or past dates."
+
         context.update({
             'today': data[0],
             'form': data[1],
@@ -226,17 +231,20 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
                         'message': "Updates Successful."})
 
     def build_data(self):
-        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now()))
+        tz = pytz.timezone("Asia/Tokyo")
 
-        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now().date()))
+        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now(tz)))
+
+        form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now(tz).date()))
 
         summary_list = []
         original_target = 1000
         completed = GritActivity.objects.filter(challenge__user=self.request.user).aggregate(Sum('count'))
-        penalty = len(GritActivity.objects.filter(challenge__user=self.request.user, date__lt=datetime.today(), count=0)) * 100
+        penalty = len(GritActivity.objects.filter(challenge__user=self.request.user, date__lt=datetime.now(pytz.timezone("Asia/Tokyo")).date(), count=0)) * 100
         remaining = (original_target + penalty) - completed.get('count__sum')
         target = original_target + penalty
-        percent_complete = ("{0:.2f}%".format(completed.get('count__sum')/target))
-        summary_list = [remaining, completed.get('count__sum'), target, percent_complete, penalty]
+        complete_percent = completed.get('count__sum')/target * 100
+        percent_complete_format = ("{0:.2f}%".format(complete_percent))
+        summary_list = [remaining, completed.get('count__sum'), target, percent_complete_format, penalty]
 
         return form_today, form, summary_list

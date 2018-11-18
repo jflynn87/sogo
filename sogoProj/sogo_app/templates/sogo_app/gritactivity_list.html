@@ -5,24 +5,27 @@
 
 
 
+
 {%block tittle_block%}
-  <title>Burpees - STS Grit Challenge Tracker</title>
+  <title>Burpees - STS GRIT Challenge Tracker</title>
 {%endblock%}
 
 
 {%block body_block%}
 
 <link rel="stylesheet" href={%static "css/gritactivity.css" %}>
+<script type="text/javascript" src="{%static 'js/gritactivity.js'%}"> </script>
+
 
 
 
 <div class="container">
 <hr>
-<h3>{{user.username}}'s Grit Challenge Summary</h3>
+<h3>{{user.username}}'s GRIT Challenge Summary</h3>
 <table class="table">
   <thead>
     <th>Remaining Burpees</th>
-    <th>Compelted Burpees</th>
+    <th>Completed Burpees</th>
     <th>Target</th>
     <th>% Complete</th>
     <th>Penalty</th>
@@ -39,7 +42,7 @@
 
 <hr>
 
-<h3>Grit Challenge Activity Detail</h3>
+<h3>GRIT Challenge Activity Detail</h3>
 <p class="message">{{message}}</p>
 <br>
 <form id="today" method="post">
@@ -51,6 +54,7 @@
 <ul style='list-style-type:none'  id="burpee-tbl">
   <p>Today:</p>
   <li>{{today}}</li>
+  <li hidden id='tzoffset'></li>
 </form>
 <hr>
 <p>Other dates:</p>

@@ -28,6 +28,7 @@ def get_schedule():
     #for user in User.objects.all():
     cut_off_date = '2018-10-01'
     activities = Activities.objects.all()
+    result_dict = {}
     for user in User.objects.all():
         for activity in activities:
             if len(Results.objects.filter(user=user, activity=activity, date__gte=cut_off_date).order_by('date')[:2]) > 1:
@@ -36,7 +37,8 @@ def get_schedule():
                 best_time = Results.objects.filter(user=user, activity=activity, date__gte=cut_off_date, date__lt=recent_result.date).aggregate(Min('duration'))
 
                 percent_change = (best_time.get('duration__min') - recent_result.duration) / best_time.get('duration__min')
-                print (user, recent_result.duration, best_time.get('duration__min'), percent_change)
-
+                result_dict[activity] = percent_change
+                #print (user, recent_result.duration, best_time.get('duration__min'), percent_change)
+    print (result_dict)
 
 get_schedule()
