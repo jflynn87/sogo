@@ -46,6 +46,24 @@ class DeleteActivityView(LoginRequiredMixin, DeleteView):
     model = Activities
     success_url = reverse_lazy('sogo_app:activity_list')
 
+    def get_context_data(self, **kwargs):
+        context = super(DeleteActivityView, self).get_context_data(**kwargs)
+        results = Results.objects.filter(activity=self.object)
+
+        context.update({
+        'results': results
+        })
+        return context
+
+    # def delete(self, request, *args, **kwargs):
+    #     print (self.object)
+    #     self.object = self.get_object()
+    #     #if self.object.gameteams_set.exists():
+    #         # Return the appropriate response
+    #     success_url = self.get_success_url()
+    #     self.object.delete(commit=False)
+    #     return HttpResponseRedirect(success_url)
+
 
 class ActivityListView(LoginRequiredMixin, ListView):
     login_url = '/sogo_app/login'

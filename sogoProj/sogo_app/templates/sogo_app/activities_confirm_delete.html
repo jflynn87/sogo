@@ -1,0 +1,41 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+{%block tittle_block%}
+  <title>Confirm Delete - STS Fitness Challenge Tracker</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<h1>Delete Activity</h1>
+<h3>Activity:  {{activities.name}}</h3>
+<br>
+<br>
+
+<h2 style="color:red">Caution!  These results will also be deleted:</h2>
+{%for result in results%}
+<ul>
+  <li>{{result}}</li>
+
+{%empty%}
+  <li>No results, safe to delete</li>
+</ul>
+
+{%endfor%}
+<br>
+<br>
+<a href="{% url 'sogo_app:my_results' %}"> <button class="btn btn-primary">Cancel</button></a>
+<br>
+<br>
+<form method="post">
+  {%csrf_token%}
+
+    <input type="submit" class="btn btn-danger" value="Delete Activity">
+
+
+</form>
+
+{%endblock%}
