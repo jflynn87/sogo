@@ -23,7 +23,11 @@
     <tr>
       <td><a href="/sogo_app/update_results/{{workout.pk}}/">{{workout.date}}</td>
       <td>{{workout.activity}}</td>
+      {%if workout.activity.target_type == "T" %}
       <td>{{workout.duration}}</td>
+      {%else%}
+      <td>{{workout.sets}} sets, {{workout.sets}} reps</td>
+      {%endif%}
       <td>{{workout.notes}}</td>
 
     </tr>

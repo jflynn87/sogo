@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,6 +13,9 @@ from sogo_app.models import Results, Activities, GritActivity, GritChallenge
 from django.core.exceptions import ObjectDoesNotExist
 from collections import defaultdict
 from django.db.models import Sum
+#imports for target_type json
+from django.http import JsonResponse
+import json
 
 
 
@@ -77,6 +80,12 @@ class LogResultsView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('sogo_app:my_results')
 
 
+    def get_form_kwargs(self):
+        kw = super(LogResultsView, self).get_form_kwargs()
+        kw['request'] = self.request # the trick!
+        return kw
+
+
     def form_valid(self, form):
 
         result = form.save(commit=False)
@@ -85,6 +94,14 @@ class LogResultsView(LoginRequiredMixin, CreateView):
         result.user = User.objects.get(pk=self.request.user.pk)
         result.save()
         return HttpResponseRedirect(self.success_url)
+
+def get_target_type(request):
+    if request.is_ajax():
+        print (request.GET['activity'])
+        activity = Activities.objects.get(pk=request.GET['activity'])
+        data = json.dumps(activity.target_type)
+        return HttpResponse(data, content_type="appliation/json")
+
 
 
 class LeaderboardView(LoginRequiredMixin, ListView):
@@ -147,10 +164,22 @@ class ResultsUpdateView(LoginRequiredMixin, UpdateView):
     success_url=reverse_lazy('sogo_app:my_results')
     model = Results
 
+    def get_form_kwargs(self):
+        kw = super(ResultsUpdateView, self).get_form_kwargs()
+        kw['request'] = self.request # the trick!
+        kw['mode'] = 'update'
+        return kw
+
+
 class ResultsDeleteView(LoginRequiredMixin, DeleteView):
     login_url = '/sogo_app/login'
     model = Results
     success_url = reverse_lazy('sogo_app:my_results')
+
+    def get_form_kwargs(self):
+        kw = super(ResultsDeleteView, self).get_form_kwargs()
+        kw['request'] = self.request # the trick!
+        return kw
 
 
 class MyResultsView(LoginRequiredMixin, ListView):

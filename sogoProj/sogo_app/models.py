@@ -18,7 +18,7 @@ class UserProfile(models.Model):
 
 class Activities(models.Model):
     TARGET_TYPES = (('T', 'Time'),
-                    ('R', 'Reps'))
+                    ('R', 'Sets & Reps'))
     name = models.CharField(max_length=100, unique=True)
     beginner_target = models.CharField(max_length=100)
     expert_target = models.CharField(max_length=100)
@@ -34,7 +34,8 @@ class Results(models.Model):
     date = models.DateField()
     activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
     duration = models.DurationField(null=True)
-    #reps = models.PositiveIntegerField(null=True)
+    reps = models.PositiveIntegerField(null=True)
+    sets = models.PositiveIntegerField(null=True)
     notes = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:

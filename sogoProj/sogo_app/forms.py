@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.forms.models import modelformset_factory
 from django.forms.formsets import BaseFormSet
 import pytz
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserProfileForm(ModelForm):
@@ -54,39 +55,65 @@ class LogResultsForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-         super().__init__(*args, **kwargs)
+         self.request = kwargs.pop('request', None)
+         self.mode = kwargs.pop('mode', None)
+
+         super(LogResultsForm, self).__init__(*args, **kwargs)
          self.fields['notes'].label='Notes (Optional)'
          self.fields['date'].initial = date.today()
          self.fields['duration'].widget.attrs['placeholder'] = "MM:SS"
-         self.fields['duration'].widget.attrs['id'] = "duration"
          self.fields['duration'].label="Time. Please enter MM:SS, for example 05:05 for 5 mins, 5 sec"
-         #self.fields['result'].widget.attrs['name'] = "duration"
+         self.fields['activity'].widget.attrs['id']="activity"
+         self.fields['duration'].widget.attrs['id']="duration_field"
+         self.fields['duration'].required = False
+         self.fields['sets'].required = False
+         self.fields['reps'].required = False
 
-    def clean(self):
-        #if - add duplicte check
-
+    def clean_duration(self):
         form_data = self.cleaned_data
-        print ('input', form_data['duration'])
+        activity = Activities.objects.get(name=form_data['activity'])
+
+        if activity.target_type == "T":
+            try:
+                entered_time = self.request.POST['duration']
+                if entered_time[2] == ":":
+                    if int(entered_time[0:2]) < 60:
+                        if len(entered_time[3:5]) == 2 and int(entered_time[3:]) < 60:
+                            pass
+                        else:
+                            self.errors['duration']=['SS must be 2 characters and less than 60']
+                    else:
+                        self.errors['duration']=['MM must be 2 characters and less than 60']
+                else:
+                    self.errors['duration']=['1 Invalid time, please enter a : between HH:SS']
+
+            except TypeError:
+                self.errors['duration']=['Invalid time, please enter HH:SS']
+            except Exception as e:
+                print ('error', e)
+                self.errors['duration']=['Invalid time, please enter HH:SS']
+        return form_data['duration']
+
+
+    def clean(self, *args, **kwargs):
+        form_data = super(LogResultsForm, self).clean()
+        print (self.request.user, form_data)
         try:
-           print (self.cleaned_data)
-           form_data = self.cleaned_data
-           time = (form_data['duration'])
-           print ('time', time)
-           datetime.strptime(str(time), "%H:%M:%S")
-           if time  < timedelta(minutes=5):
-              self.errors['duration'] = ["time too short, please re-confirm"]
+            if self.mode != 'update':
+                Results.objects.get(user=self.request.user, date=form_data['date'], activity=form_data['activity'])
+                raise forms.ValidationError('A result for that day/activity already exists')
+        except ObjectDoesNotExist:
+            pass
 
-        except ValueError:
-           print ('val error')
-           self.errors['result'] = ["format must be MM:SS"]
-        except Exception as e:
-           print("other errir", e)
-           self.errors['result'] = ["format must be MM:SS"]
-           print ('returning')
-           print (form_data)
-           return form_data
+        activity = Activities.objects.get(name=form_data['activity'])
 
-
+        if activity.target_type == "R":
+            if form_data['sets'] == None or form_data['reps'] == None:
+                raise forms.ValidationError("Please enter values in Sets and Reps (0 if no reps)")
+            elif form_data['sets'] <= 0:
+                self.errors['sets'] = ['Please enter a number of sets, must be 1 or more']
+        print ('leaving cleand_dur', form_data)
+        return form_data
 
 
 class CreateActivityForm(ModelForm):

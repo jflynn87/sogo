@@ -20,6 +20,22 @@
 
 
 </script>
+
+{%if form.non_field_errors%}
+<div class="alert alert-danger">
+  {%for error in form.non_field_errors%}
+<h4>{{error}}</h4>
+  {%endfor%}
+</div>
+{%endif%}
+
+
+{% if form.error_message %}
+      <div class="alert alert-danger">
+      <h2>{{error_message}}</h2>
+      </div>
+{%endif%}
+
 {%if not form.instance.pk%}
 <h1>Enter Your Results Here!</h1>
 {%else%}
@@ -27,8 +43,19 @@
 {%endif%}
 <form method="post" id='form'>
   {%csrf_token%}
-    {{form|bootstrap}}
-    <input type="submit" class="btn btn-primary" value="Submit Result" id='submit'>
+    <!-- {{form|bootstrap}} -->
+    {{form.date|bootstrap}}
+    {{form.activity|bootstrap}}
+    <div id="duration" >
+    {{form.duration|bootstrap}}
+    </div>
+    <div id='sets'>
+    {{form.sets|bootstrap}}
+    {{form.reps|bootstrap}}
+    </div>
+    {{form.notes|bootstrap}}
+
+   <input type="submit" class="btn btn-primary" value="Submit Result" id='submit'>
 
 </form>
 <br>

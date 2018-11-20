@@ -12,6 +12,10 @@ hr {
       background-color: #365d9b;
     }
 
+.help-block {
+  color:red;
+}
+
 @media only screen and (max-width: 600px){
 th {
   font-size: 60%;
