@@ -26,7 +26,14 @@
     </form>
     {%else%}
 
-    <a href="{% url 'sogo_app:grit_list' %}">You have already created you STS GRIT Challenge, please click here to go to your progress page</a>
+    <h4><a href="{% url 'sogo_app:grit_list' %}">You have already started an STS GRIT Challenge.  Please click here to go to your progress page</a></h4>
+    <br>
+    <br>
+    <h5>Or click below to delete your challenge so you can enter a new one.</h5>
+
+    <a href="{% url 'sogo_app:delete_grit' pk=form.instance.pk %}"> <button class="btn btn-danger">Delete GRIT Challenge</button></a>
+
+
     {%endif%}
 
 </div>

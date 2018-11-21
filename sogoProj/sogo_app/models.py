@@ -68,7 +68,7 @@ class GritChallenge(models.Model):
 
 
 class GritActivity(models.Model):
-    challenge = models.ForeignKey(GritChallenge, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(GritChallenge, on_delete=models.CASCADE, related_name="activity")
     date = models.DateField()
     count = models.PositiveIntegerField()
 

@@ -295,3 +295,19 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         summary_list = [remaining, completed.get('count__sum'), target, percent_complete_format, penalty]
 
         return form_today, form, summary_list
+
+class DeleteGritChallengeView(LoginRequiredMixin, DeleteView):
+    login_url = '/sogo_app/login'
+    model = GritChallenge
+    success_url = reverse_lazy('sogo_app:create_grit')
+
+    # def get_context_data(self,**kwargs):
+    #     context = super(DeleteGritChallengeView, self).get_context_data(**kwargs)
+    #
+    #     activities = GritActivity.objects.filter(challenge__pk=self.kwargs.get('pk'))
+    #
+    #     context.update({
+    #     'activities': activities
+    #     })
+    #
+    #     return context

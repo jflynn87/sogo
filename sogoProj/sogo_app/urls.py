@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^leaderboard/$', views.LeaderboardView.as_view(),name='leaderboard'),
     url(r'^my_results/$', views.MyResultsView.as_view(),name='my_results'),
     url(r'^create_grit/$', views.CreateGritChallengeView.as_view(),name='create_grit'),
+    url(r'^delete_grit/(?P<pk>\d+)/$', views.DeleteGritChallengeView.as_view(),name='delete_grit'),
     url(r'^grit_list/$', views.CreateGritActivityView.as_view(),name='grit_list'),
     url(r'^ajax/get_target_type/$', views.get_target_type, name='get_target_type'),
 

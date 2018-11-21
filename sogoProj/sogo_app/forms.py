@@ -60,6 +60,7 @@ class LogResultsForm(ModelForm):
 
          super(LogResultsForm, self).__init__(*args, **kwargs)
          self.fields['notes'].label='Notes (Optional)'
+         self.fields['activity'].label = "Activity - please select from the list to enter results"
          self.fields['date'].initial = date.today()
          self.fields['duration'].widget.attrs['placeholder'] = "MM:SS"
          self.fields['duration'].label="Time. Please enter MM:SS, for example 05:05 for 5 mins, 5 sec"

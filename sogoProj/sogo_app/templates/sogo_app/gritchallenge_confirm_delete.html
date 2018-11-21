@@ -1,0 +1,37 @@
+{%extends "base.html"%}
+{%load staticfiles%}
+{%load bootstrap%}
+
+
+{%block tittle_block%}
+  <title>Confirm Delete - STS Grit Challenge</title>
+{%endblock%}
+
+
+{%block body_block%}
+
+<h1>Delete GRIT Challenge</h1>
+<h5>Start Date:  {{gritchallenge.start_date}}</h5>
+<h5>Target Date: {{gritchallenge.target_date}}</h5>
+<br>
+<h3 style="color:red">Caution!  These results will also be deleted.  Scroll to the bottom to delete or cancel and go back.</h3>
+{%for result in gritchallenge.activity.all%}
+<ul>
+  <li>{{result.date}} : {{result.count}}</li>
+</ul>
+
+{%endfor%}
+<br>
+<br>
+<a href="{% url 'sogo_app:grit_list' %}"> <button class="btn btn-primary">Cancel</button></a>
+<br>
+<br>
+<form method="post">
+  {%csrf_token%}
+
+    <input type="submit" class="btn btn-danger" value="Delete Activity">
+
+
+</form>
+
+{%endblock%}
