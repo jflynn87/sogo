@@ -14,7 +14,7 @@
 <h5>Start Date:  {{gritchallenge.start_date}}</h5>
 <h5>Target Date: {{gritchallenge.target_date}}</h5>
 <br>
-<h3 style="color:red">Caution!  These results will also be deleted.  Scroll to the bottom to delete or cancel and go back.</h3>
+<h3 style="color:red">Caution!  These results will also be deleted.  Scroll to the bottom to delete or cancel.</h3>
 {%for result in gritchallenge.activity.all%}
 <ul>
   <li>{{result.date}} : {{result.count}}</li>
@@ -28,7 +28,8 @@
 <br>
 <form method="post">
   {%csrf_token%}
-
+  <h3>To complete the deletion, first do 10 burpees and post a video of it to the <a href=https://www.facebook.com/groups/SOGOTokyoSpartans> STS Facebook Group!</a></h3>
+    <h4>Once Complete, click below</h4>
     <input type="submit" class="btn btn-danger" value="Delete Activity">
 
 
