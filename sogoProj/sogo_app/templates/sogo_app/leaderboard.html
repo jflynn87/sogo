@@ -11,6 +11,8 @@
 
 {%block body_block%}
 
+<link rel="stylesheet" href={%static "css/leaderboard.css" %}>
+
 {%if not user.is_superuser%}
 <h1 >Under Construction, Please Come back after the second challenge</h1>
 
@@ -25,19 +27,22 @@
 <table class="table">
   <thead>
     <th>Name</th>
-    <th>Current Activity Date</th>
+    <th>Progress - % change from best result</th>
     <th>Current Result</th>
-    <th>Prior Activity Date</th>
-    <th>Prior Result</th>
-    <th>Progress</th>
+    <th>Prior Best Result</th>
+
   </thead>
   <tbody>
 {%for d in result%}
 
     <tr>
 {%for data in d %}
-      {%if forloop.counter == 6%}
-      <td>{{data|floatformat:"0"}}%</td>
+      {%if forloop.counter == 2%}
+      {%if data > 0%}
+      <td class='up'>{{data|floatformat:"0"}}% <span>&#8679</span></td>
+      {%else%}
+      <td class='down'>{{data|floatformat:"0"}}% <span>&#8681;</span></td>
+      {%endif%}
       {%else%}
       <td>{{data}}</td>
       {%endif%}

@@ -20,8 +20,8 @@ class Activities(models.Model):
     TARGET_TYPES = (('T', 'Time'),
                     ('R', 'Sets & Reps'))
     name = models.CharField(max_length=100, unique=True)
-    beginner_target = models.CharField(max_length=100)
-    expert_target = models.CharField(max_length=100)
+    #beginner_target = models.CharField(max_length=100)
+    #expert_target = models.CharField(max_length=100)
     target_type = models.CharField(max_length=1, choices=TARGET_TYPES)
     track = models.BooleanField()
 

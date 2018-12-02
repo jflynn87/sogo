@@ -89,7 +89,6 @@ class LogResultsView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
 
         result = form.save(commit=False)
-        print ('users', User.objects.all())
 
         result.user = User.objects.get(pk=self.request.user.pk)
         result.save()
@@ -111,50 +110,51 @@ class LeaderboardView(LoginRequiredMixin, ListView):
 
     def get_context_data(self,**kwargs):
         context = super(LeaderboardView, self).get_context_data(**kwargs)
-        activity_dict = {}
+        result_dict = {}
 
         cut_off_date = datetime.today() - timedelta(days=90)
         print (cut_off_date)
-        for activity in Activities.objects.filter(track=True):
+
+        for activity in Activities.objects.all():
+            data_list = []
             for user in User.objects.all():
-                result_list=[]
-                if len(Results.objects.filter(activity=activity, user__pk=user.pk, date__gte=cut_off_date).order_by('date')[:2]) > 1:
-                    result_list.append(user.username)
-                    for result in Results.objects.filter(activity=activity, user__pk=user.pk).order_by('date')[:2]:
-                        result_list.append(str(result.date))
-                        result_list.append(result.duration)
-                    percentage_change = ((result_list[2]-result_list[4])/result_list[2])*100
-                    result_list.append(percentage_change)
+                if len(Results.objects.filter(user=user, activity=activity, date__gte=cut_off_date).order_by('date')[:2]) > 1:
+                    recent_result = Results.objects.filter(user__pk=user.pk, activity=activity).latest('date')
 
-                    activity_dict.setdefault(activity, []).append(result_list)
+                    if activity.target_type == "T":
+                        best_time = 0
+                        for result in Results.objects.filter(user__pk=user.pk, activity=activity, date__gte=cut_off_date, date__lt=recent_result.date):
+                            if best_time == 0 or result.duration < best_time:
+                                best_time = result.duration
 
-                    # if activity_dict.get(activity):
-                    #     result = activity_dict.get(activity)
-                    #     activity_dict[activity] = result, result_list
-                    #     print (activity_dict)
-                    # else:
-                    #     #print(result_list)
-                    #     activity_dict[activity]= result_list
-                    #     print (activity_dict)
+                        percent_change = ((best_time - recent_result.duration) / best_time) * 100
+                        data = user, percent_change, recent_result.duration, best_time
+                        data_list.append(data)
+                    elif activity.target_type == "R":
+                        recent_result = Results.objects.filter(user__pk=user.pk, activity=activity).latest('date')
+                        best_result = 0
+                        recent_float = float(recent_result.sets + (recent_result.reps/((recent_result.sets + 1) * 4)))
 
-        #print ('act dict', activity_dict)
-        # sort the results by the % change which is the last item in the result_list
-        display_dict = {}
-        sorted_results_list = []
-        #for key, value in activity_dict.items():
-        #    print (value)
-        #print (activity_dict)
-        print (activity_dict)
-        for k, v in sorted(activity_dict.items(), key=lambda v: v[1][0][5], reverse=True):
+                        for result in Results.objects.filter(user__pk=user.pk, activity=activity, date__gte=cut_off_date, date__lt=recent_result.date):
+                            result_float = float(result.sets + (result.reps/((result.sets + 1) * 4)))
+                            print (result_float)
+                            if best_result == 0 or result_float > best_result:
+                                best_result = result_float
 
-#        for activity, result in sorted(activity_dict.items(), key=lambda x:x[1][5], reverse=True):
-#                print (activity, result)
-              display_dict[k]=v
+                        #percent_change = ((best_result - recent_float) / best_result) * 100
+                        percent_change = ((recent_float - best_result) / recent_float) * 100
+                        data = user, percent_change, "{0:.2f}".format(recent_float), "{0:.2f}".format(best_result)
+                        data_list.append(data)
+
+
+
+            data_list.sort(key=lambda x: x[1], reverse=True)
+            result_dict[activity] = data_list
 
 
         context.update({
           #'result_dict': display_dict,
-          'result_dict': display_dict
+          'result_dict': result_dict
          })
         return context
 
@@ -292,7 +292,12 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         target = original_target + penalty
         complete_percent = completed.get('count__sum')/target * 100
         percent_complete_format = ("{0:.2f}%".format(complete_percent))
-        summary_list = [remaining, completed.get('count__sum'), target, percent_complete_format, penalty]
+        start_date = GritActivity.objects.earliest('date')
+
+        remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
+        average = remaining/remaining_days.days
+        average_format = percent_complete_format = ("{0:.1f}".format(average))
+        summary_list = [remaining, completed.get('count__sum'), average_format, target, percent_complete_format, penalty]
 
         return form_today, form, summary_list
 
@@ -300,14 +305,3 @@ class DeleteGritChallengeView(LoginRequiredMixin, DeleteView):
     login_url = '/sogo_app/login'
     model = GritChallenge
     success_url = reverse_lazy('sogo_app:create_grit')
-
-    # def get_context_data(self,**kwargs):
-    #     context = super(DeleteGritChallengeView, self).get_context_data(**kwargs)
-    #
-    #     activities = GritActivity.objects.filter(challenge__pk=self.kwargs.get('pk'))
-    #
-    #     context.update({
-    #     'activities': activities
-    #     })
-    #
-    #     return context
