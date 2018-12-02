@@ -294,7 +294,10 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         percent_complete_format = ("{0:.2f}%".format(complete_percent))
         start_date = GritActivity.objects.filter(challenge__user=self.request.user).earliest('date')
 
-        remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
+        if GritActivity.objects.filter(challenge__user=self.request.user, count=0, date=datetime.now(tz).date()).exists():
+            remaining_days = remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
+        else:
+            remaining_days =   timedelta(days=29) - (datetime.now(tz).date() - start_date.date)
         average = remaining/remaining_days.days
         average_format = average_format = ("{0:.1f}".format(average))
         summary_list = [remaining, completed.get('count__sum'), average_format, target, percent_complete_format, penalty]
