@@ -13,15 +13,9 @@
 
 <link rel="stylesheet" href={%static "css/leaderboard.css" %}>
 
-{%if not user.is_superuser%}
-<h1 >Under Construction, Please Come back after the second challenge</h1>
-
-{%else%}
 <h2>See the progress of the STS community below.</h2>
 <h4> Please note that results are ranked in order of relative progress, not absolute results, as we hope to encourage members to compete against themselves rather than others.</h4>
 <br>
-
-
 {%for activity, result in result_dict.items%}
 <h3>Challenge:  {{activity}}</h3>
 <table class="table">
@@ -30,26 +24,20 @@
     <th>Progress - % change from best result</th>
     <th>Current Result</th>
     <th>Prior Best Result</th>
-
   </thead>
   <tbody>
-{%for d in result%}
-
+{%for res_user, change, new_result, old_result in result%}
     <tr>
-{%for data in d %}
-      {%if forloop.counter == 2%}
-      {%if data > 0%}
-      <td class='up'>{{data|floatformat:"0"}}% <span>&#8679</span></td>
+      <td>{{res_user}}</td>
+      {%if change > 0%}
+        <td class='up'>{{change|floatformat:"0"}}% <span>&#8679</span></td>
       {%else%}
-      <td class='down'>{{data|floatformat:"0"}}% <span>&#8681;</span></td>
+        <td class='down'>{{change|floatformat:"0"}}% <span>&#8681;</span></td>
       {%endif%}
-      {%else%}
-      <td>{{data}}</td>
-      {%endif%}
+      <td> {{new_result}}</td>
+      <td>{{old_result}}</td>
 {%endfor%}
     </tr>
-
-{%endfor%}
   </tbody>
 </table>
 {%endfor%}
@@ -57,5 +45,5 @@
 <p>1. Results will only show after at least 2 records have been added</p>
 <p>2. If you do not wish to have your name publicized, please create a new account with a non-identifiable user name.</p>
 <p>3. Only the most recent 90 days of results will be displayed on the leaderboard.</p>
-{%endif%}
+
 {%endblock%}

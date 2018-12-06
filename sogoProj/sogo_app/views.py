@@ -112,7 +112,7 @@ class LeaderboardView(LoginRequiredMixin, ListView):
         context = super(LeaderboardView, self).get_context_data(**kwargs)
         result_dict = {}
 
-        cut_off_date = datetime.today() - timedelta(days=90)
+        cut_off_date = datetime.today() - timedelta(days=100)
         print (cut_off_date)
 
         for activity in Activities.objects.all():
@@ -147,9 +147,9 @@ class LeaderboardView(LoginRequiredMixin, ListView):
                         data_list.append(data)
 
 
-
-            data_list.sort(key=lambda x: x[1], reverse=True)
-            result_dict[activity] = data_list
+            if len(data_list) > 0:
+                data_list.sort(key=lambda x: x[1], reverse=True)
+                result_dict[activity] = data_list
 
 
         context.update({
