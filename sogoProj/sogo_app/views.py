@@ -128,7 +128,7 @@ class LeaderboardView(LoginRequiredMixin, ListView):
                                 best_time = result.duration
 
                         percent_change = ((best_time - recent_result.duration) / best_time) * 100
-                        data = user, percent_change, recent_result.duration, best_time
+                        data = user, round(percent_change), recent_result.duration, best_time
                         data_list.append(data)
                     elif activity.target_type == "R":
                         recent_result = Results.objects.filter(user__pk=user.pk, activity=activity).latest('date')
@@ -137,20 +137,18 @@ class LeaderboardView(LoginRequiredMixin, ListView):
 
                         for result in Results.objects.filter(user__pk=user.pk, activity=activity, date__gte=cut_off_date, date__lt=recent_result.date):
                             result_float = float(result.sets + (result.reps/((result.sets + 1) * 4)))
-                            print (result_float)
                             if best_result == 0 or result_float > best_result:
                                 best_result = result_float
 
                         #percent_change = ((best_result - recent_float) / best_result) * 100
                         percent_change = ((recent_float - best_result) / recent_float) * 100
-                        data = user, percent_change, "{0:.2f}".format(recent_float), "{0:.2f}".format(best_result)
+                        data = user, round(percent_change), "{0:.2f}".format(recent_float), "{0:.2f}".format(best_result)
                         data_list.append(data)
 
 
             if len(data_list) > 0:
                 data_list.sort(key=lambda x: x[1], reverse=True)
                 result_dict[activity] = data_list
-
 
         context.update({
           #'result_dict': display_dict,

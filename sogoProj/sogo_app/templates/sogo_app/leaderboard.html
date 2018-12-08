@@ -29,8 +29,10 @@
 {%for res_user, change, new_result, old_result in result%}
     <tr>
       <td>{{res_user}}</td>
-      {%if change > 0%}
-        <td class='up'>{{change|floatformat:"0"}}% <span>&#8679</span></td>
+      {%if change == 0%}
+      <td>{{change}}% <span>&#8703</span></td>
+      {%elif change > 0%}
+        <td class='up'>{{change}}% <span>&#8679</span></td>
       {%else%}
         <td class='down'>{{change|floatformat:"0"}}% <span>&#8681;</span></td>
       {%endif%}
