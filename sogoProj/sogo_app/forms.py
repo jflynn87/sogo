@@ -86,13 +86,13 @@ class LogResultsForm(ModelForm):
                     else:
                         self.errors['duration']=['MM must be 2 characters and less than 60']
                 else:
-                    self.errors['duration']=['1 Invalid time, please enter a : between HH:SS']
+                    self.errors['duration']=['1 Invalid time, please enter a : between MM:SS']
 
             except TypeError:
-                self.errors['duration']=['Invalid time, please enter HH:SS']
+                self.errors['duration']=['Invalid time, please enter MM:SS']
             except Exception as e:
                 print ('error', e)
-                self.errors['duration']=['Invalid time, please enter HH:SS']
+                self.errors['duration']=['Invalid time, please enter MM:SS']
         return form_data['duration']
 
 
@@ -102,7 +102,7 @@ class LogResultsForm(ModelForm):
         try:
             if self.mode != 'update':
                 Results.objects.get(user=self.request.user, date=form_data['date'], activity=form_data['activity'])
-                raise forms.ValidationError('A result for that day/activity already exists')
+                raise forms.ValidationError('A result for that day/activity already exists, please update, click STS Monthly Challenge (above), then My Results')
         except ObjectDoesNotExist:
             pass
 
