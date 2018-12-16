@@ -26,9 +26,11 @@ def get_schedule():
     # connection.close()
 
     #for user in User.objects.all():
-    for challenge in GritChallenge.objects.all():
-        for activity in GritActivity.objects.filter(challenge=challenge):
-            print (activity.challenge.user, activity.date, activity.count)
+    #for challenge in GritChallenge.objects.all():
+    print (GritActivity.objects.filter(count__gt=0).values('challenge__user__username').annotate(count=Sum('count'), days=Count('date')))
+
+        #for activity in GritActivity.objects.filter(challenge=challenge):
+        #    print (activity.challenge.user, activity.date, activity.count)
 
 
 

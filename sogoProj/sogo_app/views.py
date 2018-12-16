@@ -58,15 +58,6 @@ class DeleteActivityView(LoginRequiredMixin, DeleteView):
         })
         return context
 
-    # def delete(self, request, *args, **kwargs):
-    #     print (self.object)
-    #     self.object = self.get_object()
-    #     #if self.object.gameteams_set.exists():
-    #         # Return the appropriate response
-    #     success_url = self.get_success_url()
-    #     self.object.delete(commit=False)
-    #     return HttpResponseRedirect(success_url)
-
 
 class ActivityListView(LoginRequiredMixin, ListView):
     login_url = '/sogo_app/login'
@@ -278,7 +269,11 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
     def build_data(self):
         tz = pytz.timezone("Asia/Tokyo")
 
-        form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now(tz)))
+        try:
+            form_today = forms.CreateGritActivityForm(instance=GritActivity.objects.get(challenge__user=self.request.user, date=datetime.now(tz)))
+        except Exception:
+            form_today = ''
+
 
         form = forms.BurpeeFormSet(queryset=GritActivity.objects.filter(challenge__user=self.request.user).exclude(date=datetime.now(tz).date()))
 
@@ -296,8 +291,15 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
             remaining_days = remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
         else:
             remaining_days =   timedelta(days=29) - (datetime.now(tz).date() - start_date.date)
-        average = remaining/remaining_days.days
-        average_format = average_format = ("{0:.1f}".format(average))
+
+        if remaining_days.days != 0:
+            average = remaining/remaining_days.days
+            average_format = average_format = ("{0:.1f}".format(average))
+        elif remaining_days.days == 0 and  remaining <= 0:
+            average_format = 0
+        else:
+            average_format = remaining
+
         summary_list = [remaining, completed.get('count__sum'), average_format, target, percent_complete_format, penalty]
 
         return form_today, form, summary_list
