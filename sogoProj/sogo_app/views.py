@@ -232,13 +232,13 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         context = super(CreateGritActivityView, self).get_context_data(**kwargs)
         print (self.request )
         data = self.build_data()
-        message = "Please enter the number of burpees per day. You can only enter for today or past dates."
+
 
         context.update({
             'today': data[0],
             'form': data[1],
             'summary_list': data[2],
-            'message': message
+            'message': data[3]
         })
         return context
 
@@ -258,13 +258,12 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
                 GritActivity.objects.filter(challenge__user=request.user,date=cd['date']).update(count=cd['count'])
 
         data = self.build_data()
-        message = "Updates Successful"
 
         return render(request, 'sogo_app/gritactivity_list.html', {
                         'today': data[0],
                         'form': data[1],
                         'summary_list': data[2],
-                        'message': "Updates Successful."})
+                        'message': data[3]})
 
     def build_data(self):
         tz = pytz.timezone("Asia/Tokyo")
@@ -286,6 +285,10 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
         complete_percent = (completed.get('count__sum'))/target * 100
         percent_complete_format = ("{0:.2f}%".format(complete_percent))
         start_date = GritActivity.objects.filter(challenge__user=self.request.user).earliest('date')
+        if self.request.POST:
+            message = "Updates Successful"
+        else:
+            message = "Please enter the number of burpees per day. You can only enter for today or past dates."
 
         if GritActivity.objects.filter(challenge__user=self.request.user, count=0, date=datetime.now(tz).date()).exists():
             remaining_days = remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
@@ -297,12 +300,13 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
             average_format = average_format = ("{0:.1f}".format(average))
         elif remaining_days.days == 0 and  remaining <= 0:
             average_format = 0
+            message = "Congratualtions, you have completed the GRIT Burpee Challenge!"
         else:
             average_format = remaining
 
         summary_list = [remaining, completed.get('count__sum'), average_format, target, percent_complete_format, penalty]
 
-        return form_today, form, summary_list
+        return form_today, form, summary_list, message
 
 class DeleteGritChallengeView(LoginRequiredMixin, DeleteView):
     login_url = '/sogo_app/login'
