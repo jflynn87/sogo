@@ -294,11 +294,12 @@ class CreateGritActivityView(LoginRequiredMixin, ListView):
             remaining_days = remaining_days =   timedelta(days=30) - (datetime.now(tz).date() - start_date.date)
         else:
             remaining_days =   timedelta(days=29) - (datetime.now(tz).date() - start_date.date)
+        print (remaining_days.days)
 
-        if remaining_days.days != 0:
+        if remaining_days.days > 0:
             average = remaining/remaining_days.days
             average_format = average_format = ("{0:.1f}".format(average))
-        elif remaining_days.days == 0 and  remaining <= 0:
+        elif remaining_days.days <= 0 and  remaining <= 0:
             average_format = 0
             message = "Congratualtions, you have completed the GRIT Burpee Challenge!"
         else:
